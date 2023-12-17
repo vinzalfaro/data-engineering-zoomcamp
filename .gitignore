@@ -1,3 +1,7 @@
 yellow_tripdata_2021-01.csv
 taxi_zone_lookup.csv
 ny_taxi_postgres_data
+output.csv.gz
+terraform-provider-google_v5.6.0_x5.exe
+.terraform-version
+.terraform.lock.hcl
