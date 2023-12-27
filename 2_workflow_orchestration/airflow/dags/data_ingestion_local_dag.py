@@ -23,19 +23,25 @@ PG_DATABASE = os.getenv('PG_DATABASE')
 local_workflow = DAG(
     "LocalIngestionDag",
     schedule_interval="0 6 2 * *",
-    start_date=datetime(2020, 1, 1)
+    start_date=datetime(2019, 1, 1)
 )
 
-
-URL_PREFIX = 'https://s3.amazonaws.com/nyc-tlc/trip+data' 
-URL_TEMPLATE = URL_PREFIX + '/yellow_tripdata_{{ execution_date.strftime(\'%Y-%m\') }}.csv'
-OUTPUT_FILE_TEMPLATE = AIRFLOW_HOME + '/output_{{ execution_date.strftime(\'%Y-%m\') }}.csv'
+URL_PREFIX = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download' 
+URL_TEMPLATE = URL_PREFIX + '/yellow/yellow_tripdata_{{ execution_date.strftime(\'%Y-%m\') }}.csv.gz'
+COMPRESSED_FILE_TEMPLATE = AIRFLOW_HOME + '/output_{{ execution_date.strftime(\'%Y_%m\') }}.csv.gz'
+CSV_FILE_TEMPLATE = AIRFLOW_HOME + '/output_{{ execution_date.strftime(\'%Y_%m\') }}.csv'
 TABLE_NAME_TEMPLATE = 'yellow_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
+
 
 with local_workflow:
     wget_task = BashOperator(
         task_id='wget',
-        bash_command=f'curl -sSL {URL_TEMPLATE} > {OUTPUT_FILE_TEMPLATE}'
+        bash_command=f'curl -sSL {URL_TEMPLATE} > {COMPRESSED_FILE_TEMPLATE}'
+    )
+
+    decompress_task = BashOperator(
+        task_id='decompress',
+        bash_command=f'gzip -d {COMPRESSED_FILE_TEMPLATE}'
     )
 
     ingest_task = PythonOperator(
@@ -48,8 +54,8 @@ with local_workflow:
             port=PG_PORT,
             db=PG_DATABASE,
             table_name=TABLE_NAME_TEMPLATE,
-            csv_file=OUTPUT_FILE_TEMPLATE
+            csv_file=CSV_FILE_TEMPLATE
         )
     )
 
-    wget_task >> ingest_task
+    wget_task >> decompress_task >> ingest_task
