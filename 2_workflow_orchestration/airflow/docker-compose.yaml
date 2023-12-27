@@ -64,6 +64,12 @@ x-airflow-common:
     # TODO: Please change GCP_PROJECT_ID & GCP_GCS_BUCKET, as per your config
     GCP_PROJECT_ID: 'massive-haiku-407306'
     GCP_GCS_BUCKET: 'gcs-bucket-massive-haiku-407306'
+    
+    PG_HOST: "${PG_HOST}"
+    PG_USER: "${PG_USER}"
+    PG_PASSWORD: "${PG_PASSWORD}"
+    PG_PORT: "${PG_PORT}"
+    PG_DATABASE: "${PG_DATABASE}"
 
   volumes:
     - ./dags:/opt/airflow/dags
