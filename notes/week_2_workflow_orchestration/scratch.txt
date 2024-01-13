@@ -1,0 +1,28 @@
+GCP_PROJECT_ID: 'massive-haiku-407306'
+GCP_GCS_BUCKET: 'gcs-bucket-massive-haiku-407306'
+
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://postgres:password@pgdatabase:5432/ny_taxi')
+engine.connect()
+
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) could not translate host name "pgdatabase" to address: Temporary failure in name resolution
+
+pgcli -h pgdatabase -p 5432 -u postgres -d ny_taxi
+
+docker exec -it f645c1f60b3f bash
+
+https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz
+
+URL_PREFIX = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download' 
+URL_TEMPLATE = URL_PREFIX + '/yellow/yellow_tripdata_{{ execution_date.strftime(\'%Y-%m\') }}.csv.gz'
+OUTPUT_FILE_TEMPLATE = '/output_{{ execution_date.strftime(\'%Y_%m\') }}.csv'
+TABLE_NAME_TEMPLATE = 'yellow_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
+
+with local_workflow:
+    wget_task = BashOperator(
+        task_id='wget',
+        bash_command=f'curl -sSL {URL_TEMPLATE} > {OUTPUT_FILE_TEMPLATE}'
+    )
+
+Bash command:
+curl -sSL https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz > output_2019_01.csv.gz
