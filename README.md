@@ -1,7 +1,7 @@
 # Data Engineering Zoomcamp
 
 GitHub Repo: [Data Engineering Zoomcamp (GitHub)](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main)  
-YouTube channel: [Data Engineering Zoomcamp (YouTube)](https://youtube.com/playlist?list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&si=eOOD86AcfETpsRoq) 
+YouTube channel: [Data Engineering Zoomcamp (YouTube)](https://youtube.com/playlist?list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&si=eOOD86AcfETpsRoq)  
 Streamlit: [DE Zoomcamp UI](https://dezoomcamp.streamlit.app/)  
 NYC TLC data can be found [here](https://github.com/DataTalksClub/nyc-tlc-data).  
 
